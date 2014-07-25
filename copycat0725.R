@@ -1,7 +1,9 @@
 #!/usr/bin/Rscript --vanilla
-
-
-source('/gscuser/habel/programs/cc/cnv_fns0725.R'); 
+#argv <- commandArgs(trailingOnly = FALSE)
+#base_dir <- dirname(substring(argv[grep("--file=", argv)], 8))
+    #source(paste(base <- dir, fname, sep="/"))
+#script.dir <- dirname(sys.frame(0)$ofile)
+#source(paste(base_dir, "/cnv_fns0725.R", sep="")); 
 library(DNAcopy);
 library(ff);
 library(ffbase);
@@ -9,6 +11,7 @@ library("optparse");
 
 option_list<-list(
   #make_option("--test_info", default=NULL, help="info file for test samples [default %default]"),
+  make_option("--source_dir", default=NULL, help="directory containing source code"),
   make_option("--test_cov", default=NULL, help="single test coverage file [default %default]"),
   make_option("--test_vcf", default=NULL, help="single test vcf_file [default %default]"),
   make_option("--ctl_info", default=NULL, help="info file for ctl samples [default %default]"),
@@ -50,6 +53,7 @@ option_list<-list(
 );
  
 opt=parse_args(OptionParser(option_list=option_list));
+source(paste(opt$source_dir, "/cnv_fns0725.R", sep=""));  
 vafs_normalize=opt$vafs_normalize;
 if(vafs_normalize && !opt$use_af) {
   print("Can't do VAF-based normalization with use_af=FALSE.");
@@ -124,7 +128,7 @@ if(opt$plot.only) {
   combine_cov(sample.infile=opt$ctl_info, cov.comb=ctlcombfile, cov.file=NULL, last.autosome=opt$last.autosome);
   if(opt$use_af) {
     print("calculating vafs");
-    af.to.exons(exon.target=opt$target.bedfile, snp.wingspan=opt$snp.wingspan, last.autosome=opt$last.autosome, sample.infile=opt$test_info, vcf.file=opt$test_vcf, min.cov=opt$min.var.cov, outfile=temp2, var.bedfile=paste(tempdir, "/temp.bed", sep=""), vcftype=opt$vcftype);
+    af.to.exons(exon.target=opt$target.bedfile, snp.wingspan=opt$snp.wingspan, last.autosome=opt$last.autosome, sample.infile=opt$test_info, vcf.file=opt$test_vcf, min.cov=opt$min.var.cov, outfile=temp2, var.bedfile=paste(tempdir, "/temp.bed", sep=""), vcftype=opt$vcftype, opt$source_dir);
   } 
   select.normals.get.med(combfile, ctlcombfile, temp2, opt$min.normal.corr, opt$min.num.normals, opt$min_coverage, last.autosome=opt$last.autosome, ctlmedfile);
     

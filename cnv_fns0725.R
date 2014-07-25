@@ -458,7 +458,7 @@ segment_norm<-function( norm.cov.file, range.file, outfile, names, minwid=3, seg
 }
 
 
-af.to.exons<-function(exon.target, snp.wingspan, last.autosome=22, sample.infile=NULL, vcf.file=NULL, min.cov=20, outfile, var.bedfile, vcftype) {
+af.to.exons<-function(exon.target, snp.wingspan, last.autosome=22, sample.infile=NULL, vcf.file=NULL, min.cov=20, outfile, var.bedfile, vcftype, source_dir) {
   
   af.list=NULL;
   if(snp.wingspan>0) {
@@ -482,14 +482,14 @@ af.to.exons<-function(exon.target, snp.wingspan, last.autosome=22, sample.infile
   af.list<-vector("list", length(vcfs));
   for(j in 1:length(vcfs)) {
     if(vcftype=="SAMTOOLS") {
-  	  print(paste(BEDTools, "intersectBed -wa -u -a ", vcfs[j], " -b ", var.bedfile, " | ", BEDTools, "closestBed -a stdin -b ", exon.target, " -t first | perl /gscuser/habel/programs/cc/parse_vcf_st.pl ", min.cov, sep=""));
-        vafs=read.csv(pipe(paste(BEDTools, "intersectBed -wa -u -a ", vcfs[j], " -b ", var.bedfile, " | ", BEDTools, "closestBed -a stdin -b ", exon.target, " -t first | perl /gscuser/habel/programs/cc/parse_vcf_st.pl ", min.cov, sep="")), stringsAsFactors=FALSE);
+  	  print(paste(BEDTools, "intersectBed -wa -u -a ", vcfs[j], " -b ", var.bedfile, " | ", BEDTools, "closestBed -a stdin -b ", exon.target, " -t first | perl ", source_dir, "/parse_vcf_st.pl ", min.cov, sep=""));
+        vafs=read.csv(pipe(paste(BEDTools, "intersectBed -wa -u -a ", vcfs[j], " -b ", var.bedfile, " | ", BEDTools, "closestBed -a stdin -b ", exon.target, " -t first | perl ", source_dir, "/parse_vcf_st.pl ", min.cov, sep="")), stringsAsFactors=FALSE);
       } else if(vcftype=="VARSCAN") {
-        print(paste( "cut -f 1-10 ", vcfs[j], " | intersectBed -wa -u -a stdin -b ", var.bedfile, " | ", BEDTools, "closestBed -a stdin -b ", exon.target, " -t first | perl /gscuser/habel/programs/cc/parse_vcf_gi1vs.pl ", min.cov, sep=""));
-        vafs=read.csv(pipe(paste("cut -f 1-10 ", vcfs[j],  " | intersectBed -wa -u -a stdin  -b ", var.bedfile, " | ", BEDTools, "closestBed -a stdin -b ", exon.target, " -t first | perl /gscuser/habel/programs/cc/parse_vcf_gi1vs.pl ", min.cov, sep="")), stringsAsFactors=FALSE);
+        print(paste( "cut -f 1-10 ", vcfs[j], " | intersectBed -wa -u -a stdin -b ", var.bedfile, " | ", BEDTools, "closestBed -a stdin -b ", exon.target, " -t first | perl ", source_dir, "/parse_vcf_gi1vs.pl ", min.cov, sep=""));
+        vafs=read.csv(pipe(paste("cut -f 1-10 ", vcfs[j],  " | intersectBed -wa -u -a stdin  -b ", var.bedfile, " | ", BEDTools, "closestBed -a stdin -b ", exon.target, " -t first | perl ", source_dir, "/parse_vcf_gi1vs.pl ", min.cov, sep="")), stringsAsFactors=FALSE);
       } else {
-		print(paste(BEDTools, "intersectBed -wa -u -a ", vcfs[j], " -b ", var.bedfile, " | ", BEDTools, "closestBed -a stdin -b ", exon.target, " -t first | perl /gscuser/habel/programs/cc/parse_vcf_gi1.pl ", min.cov, sep=""));
-		vafs=read.csv(pipe(paste(BEDTools, "intersectBed -wa -u -a ", vcfs[j], " -b ", var.bedfile, " | ", BEDTools, "closestBed -a stdin -b ", exon.target, " -t first | perl /gscuser/habel/programs/cc/parse_vcf_gi1.pl ", min.cov, sep="")), stringsAsFactors=FALSE);
+		print(paste(BEDTools, "intersectBed -wa -u -a ", vcfs[j], " -b ", var.bedfile, " | ", BEDTools, "closestBed -a stdin -b ", exon.target, " -t first | perl ", source_dir, "/parse_vcf_gi1.pl ", min.cov, sep=""));
+		vafs=read.csv(pipe(paste(BEDTools, "intersectBed -wa -u -a ", vcfs[j], " -b ", var.bedfile, " | ", BEDTools, "closestBed -a stdin -b ", exon.target, " -t first | perl ", source_dir, "/parse_vcf_gi1.pl ", min.cov, sep="")), stringsAsFactors=FALSE);
       }
           
       chrnum=vafs[ , "chr"];
