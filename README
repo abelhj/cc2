@@ -1,1 +1,16 @@
-test
+copycat2--Normalizes targeted capture sequence coverage against a pooled normal control for CNV detection and plotting.  Uses variant allele frequecies to aid in normalization and provide support for CNV calls.
+Required input files:
+test_cov=case coverage, output from BEDTools coverage bed with target-level (exon or bait) read counts (should be in the format: chr start stop coverage non-zero_bases target_len frac_non_zero)
+test_vcf=vcf for case (optional but strongly recommended)
+ctl_info=list of control coverage files 1 file per line, with absolute file paths.  control coverage files should be in the same format as for cases.
+target.bedfile=bedfile (3 column) used to create coverage files 
+
+all other files are as described in R documentation.
+
+
+
+Example:
+library(CC2)
+
+copycat2(test_cov="/gscuser/habel/programs/data/cov/tumor/AML11.RMG.tumor.bam.cov.3.txt", test_vcf="/gscuser/eduncava/my_space/CNV/RMG/vcfs/AML11.germline.RMG.VCF", ctl_info="/gscuser/habel/programs/data/cov/normal/new.info.txt", outdir="/gscuser/habel/programs/data/workdir/test0909",
+ outprefix="AML11_1", target.bedfile="/gscuser/habel/programs/data/workdir/baits.3col.bed", fa="/gscuser/eduncava/MedSeq/CNV/build37.fa", vcftype="VARSCAN", use_af=TRUE, min_coverage=50, plot.only=FALSE, annot.bedfile="/gscuser/eduncava/MedSeq/CNV/hg19.annot.bed", snp.wingspan=0, plot.bedfile=NULL,  plot.starts=1, plot.stops=22, p.af.cutoff=1e-4, p.cov.cutoff=1e-4, af.threshold=0.58, png=FALSE, coverage.min.ratio=0.75, coverage.max.ratio=1.25, minwid=5, segalpha=0.01, sdundo=2, restrict="0.125,6", last.autosome=22, frac.normal=0.5, thin.rate=NULL, plot.id="", min.var.cov=20, vafs_normalize=TRUE, min.normal.corr=0.8, min.num.normals=3, clean.up=TRUE, read_len=100)
