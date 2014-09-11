@@ -1,6 +1,6 @@
 copycat2--Normalizes targeted capture sequence coverage against a pooled normal control for CNV detection and plotting.  Uses variant allele frequecies to aid in normalization and provide support for CNV calls.
 Required input files:
-test_cov=case coverage, output from BEDTools coverage bed with target-level (exon or bait) read counts (should be in the format: chr start stop coverage non-zero_bases target_len frac_non_zero)
+test_cov=case coverage, output from BEDTools coverage bed with target-level (exon or bait) read counts (should be in 7 column format obtained from using 3-col bed)
 test_vcf=vcf for case (optional but strongly recommended)
 ctl_info=list of control coverage files 1 file per line, with absolute file paths.  control coverage files should be in the same format as for cases.
 target.bedfile=bedfile (3 column) used to create coverage files 
